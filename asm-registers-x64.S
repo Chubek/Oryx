@@ -8,6 +8,7 @@
 #define SYSV_ARG4_QWORD %rcx
 #define SYSV_ARG5_QWORD %r8
 #define SYSV_ARG6_QWORD %r9
+#define SYSV_RETURN_QWORD %rax
 
 #define SYSV_ARG1_DWORD %edi
 #define SYSV_ARG2_DWORD %esi
@@ -15,6 +16,7 @@
 #define SYSV_ARG4_DWORD %ecx
 #define SYSV_ARG5_DWORD %r8d
 #define SYSV_ARG6_DWORD %r9d
+#define SYSV_RETURN_DWORD %edx
 
 #define SYSV_ARG1_HWORD %di
 #define SYSV_ARG2_HWORD %si
@@ -22,6 +24,7 @@
 #define SYSV_ARG4_HWORD %cx
 #define SYSV_ARG5_HWORD %r8w
 #define SYSV_ARG6_HWORD %r9w
+#define SYSV_RETURN_HWORD %ax
 
 #define SYSV_ARG1_LOWBYTE %dil
 #define SYSV_ARG2_LOWBYTE %sil
@@ -29,6 +32,7 @@
 #define SYSV_ARG4_LOWBYTE %cl
 #define SYSV_ARG5_LOWBYTE %r8b
 #define SYSV_ARG6_LOWBYTE %r9b
+#define SYSV_RETURN_LOWBYTE %al
 
 #define SYSV_ARG1_HIGHBYTE %dh
 #define SYSV_ARG2_HIGHBYTE %sh
@@ -36,6 +40,7 @@
 #define SYSV_ARG4_HIGHBYTE %ch
 #define SYSV_ARG5_HIGHBYTE %r8b
 #define SYSV_ARG6_HIGHBYTE %r9b
+#define SYSV_RETURN_HIGHBYTE %ah
 
 #define SYSV_STACKPTR_QWORD %rsp
 #define SYSV_STACKPTR_DWORD %esp
