@@ -1,8 +1,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "asm-interface-decl.h"
-#include "oryx.h"
+#include "type-definitions.h"
 
 struct VirtualPageTableEntry {
   address_t base_address;
@@ -16,12 +15,12 @@ struct VirtualPageTableEntry {
 };
 
 struct VirtualPageTable {
-  VirtualPageTableEntry *entries[MAX_VIRTUAL_PAGE_TABLE_ENTRIES];
+  VirtualPageTableEntry *entries[VIRTUAL_PAGE_TABLE_ENTRIES];
   size_t num_allocated;
 };
 
-struct PageDirectory {
-  VirtualPageTable *tables[MAX_VIRTUALA_PAGE_DIRECTORY_TABLES];
+struct VirtualPageDirectory {
+  VirtualPageTable *tables[VIRTUAL_PAGE_TABLE_ENTRIES];
   size_t num_allocated;
 };
 
