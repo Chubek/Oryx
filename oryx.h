@@ -32,7 +32,7 @@ typedef struct TLBEntry TLBEntry;
 typedef struct TransLookasideBuffer TransLookasideBuffer;
 typedef unsigned int pageid_t;
 typedef unsigned long physaddr_t;
-typedef unsigned long pageaddr_t;
+typedef unsigned long virtaddr_t;
 typedef unsigned long pagesize_t;
 typedef unsigned long pageoffs_t;
 typedef unsigned long mapaddr_t;
@@ -44,8 +44,11 @@ typedef unsigned long virtpagenum_t;
 typedef unsigned long physpagenum_t;
 typedef int faultstat_t;
 
-MemoryPage create_virtual_page(pageid_t id, pageflag_t flags,
-                               physaddr_t physical_addr, pagesize_t size,
+MemoryPage create_virtual_page(pageid_t id, 
+			       pageflag_t flags,
+                               physaddr_t physical_addr,
+			       virtaddr_t virtual_addr,
+			       pagesize_t size,
                                pageoffs_t offset);
 TLBEnty create_tlb_entry(virtpagenum_t virtual_page_number,
                          physpagenum_t physical_page_number);
