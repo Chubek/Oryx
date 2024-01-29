@@ -80,9 +80,8 @@ void initialize_pml4(X64PageMapLevel4 *pml4) {
 }
 
 uint64_t translate_virtual_address(X64PageMapLevel4 *pml4,
-                                   VirtualPageTable *vpt,
-                                   address_t virtual_address) {
-  x64_asm_translate_virtual_address(pml4, virtual_address);
+                                   VirtualPageTable *vpt) {
+  x64_asm_translate_virtual_address(pml4, vpt->virtual_address);
   x64_map_pml4_to_virtual_page_table(vpt, pml4);
   return 0;
 }
