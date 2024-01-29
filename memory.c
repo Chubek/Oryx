@@ -1,3 +1,7 @@
+#include "oryx.h"
+#include "asm-interface-decl.h"
+
+
 enum MemoryPageLevel {
   MEMPAGE_L1,
   MEMPAGE_L2,
@@ -8,6 +12,7 @@ struct MemoryPage {
   pageid_t self_id;
   pageflag_t flags;
   physaddr_t physical_address;
+  virtaddr_t virtual_address;
   pagesize_t self_size;
   pageoffs_t self_offset;
   pagenum_t page_number;
@@ -56,13 +61,17 @@ void add_tlb_entry(TransLookasideBuffer *tlb, virtpagenum_t virtual_page_number,
 }
 
 MemoryPage create_memory_page(MemoryPageLevel level, pageid_t id,
-                              pageflag_t flags, physaddr_t physical_addr,
-                              pagesize_t size, pageoffs_t offset) {
+                              pageflag_t flags, 
+			      physaddr_t physical_addr,
+			      virtaddr_t virtual_addr, 
+			      pagesize_t size, 
+			      pageoffs_t offset) {
   MemoryPage mpage;
   mpage.level = level;
   mpage.self_id = id;
   mpage.flags = flags;
   mpage.physical_address = physical_addr;
+  mpage.virtual_address = virtual_addr;
   mpage.self_size = size;
   mpage.self_offset = offset;
   mpage.last_accessed_epoch = 0;
@@ -83,3 +92,6 @@ void add_mempage_imm_table(MemoryPage *page, PageTable *imm_table) {
 void add_mempage_tlb(MemoryPage *page, TransLookasideBuffer *tbl) {
   page->tlb = tlb;
 }
+
+
+
