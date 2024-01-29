@@ -1,97 +1,83 @@
+#include <stdint.h>
+#include <stdbool.h>
+
 #include "oryx.h"
 #include "asm-interface-decl.h"
 
 
-enum MemoryPageLevel {
-  MEMPAGE_L1,
-  MEMPAGE_L2,
-  MEMPAGE_L3,
+struct PageTableEntry {
+   address_t base_address;
+   address_t virtual_address;
+   address_t physical_address;
+   bool protect_read;
+   bool protect_write;
+   bool protect_exec;
+   int flags;
+   size_t size;
 };
 
-struct MemoryPage {
-  pageid_t self_id;
-  pageflag_t flags;
-  physaddr_t physical_address;
-  virtaddr_t virtual_address;
-  pagesize_t self_size;
-  pageoffs_t self_offset;
-  pagenum_t page_number;
-  acctime_t last_access_epoch;
-  faultstat_t faulted;
-  mapaddr_t mapped_addresses[MAX_MAP_ADDRESS];
-  MemoryPageLevel level;
-  PageTable *intermediate_table;
-  TransLookasideBuffer *tlb;
-};
 
 struct PageTable {
-  MemoryPage pages[MAX_TABLE_PAGE];
-  avail_t num_available_pges;
+   PageTableEntry *entries[MAX_PAGE_TABLE_ENTRIES];
+   size_t num_allocated;
 };
 
-struct TLBEntry {
-  virtpagenum_t virtual_page_number;
-  physpagenum_t physical_page_number;
+
+struct PageDirectory {
+   PageTable *tables[MAX_PAGE_DIRECTORY_TABLES];
+   size_t num_allocated;
 };
 
-struct TransLookasideBuffer {
-  TLBEntry entries[MAX_TLB_ENTRIES];
-  uint32_t num_entries;
-};
 
-TLBEnty create_tlb_entry(virtpagenum_t virtual_page_number,
-                         physpagenum_t physical_page_number) {
-  TLBEntry tlb_entry = (TLBEntry){.virtual_page_number = virtual_page_number,
-                                  .physical_page_number = physical_page_number};
-  return tlb_entry;
+PageTableEntry new_page_table_entry(address_t base_address, int flags) {
+   PageTableEntry entry;
+   entry.base_address = base_address;
+   entry.virtual_address = ADDRESS_UNASSIGNED;
+   entry.physical_address = ADDRESS_UNASSIGNED;
+   entry.protect_read  = false;
+   entry.protect_write = false;
+   entry.protect_exec = false;
+   entry.flags = flags;
+   return entry;
 }
 
-TransLookasideBuffer create_tlb(void) {
-  TransLookasideBuffer tlb;
-  tlb.num_entries = 0;
-  return tlb;
+void page_table_entry_set_virtual_address(PageTableEntry *entry, address_t virtual_address) {
+   entry->virtual_address = virtual_address;
 }
 
-void add_tlb_entry(TransLookasideBuffer *tlb, virtpagenum_t virtual_page_number,
-                   physpagenum_t physical_page_number) {
-  if (tlb->num_entries < MAX_TLB_ENTRIES) {
-    TLBEntry entry = create_tlb_entry(virtual_page_number, physicl_page_number);
-    tlb->entries[tlb->num_entries++] = entry;
-  }
+void page_table_entry_set_physcial_address(PageTableEntry *entry, address_t physical_address) {
+   entry->physical_address = physical_address;
 }
 
-MemoryPage create_memory_page(MemoryPageLevel level, pageid_t id,
-                              pageflag_t flags, 
-			      physaddr_t physical_addr,
-			      virtaddr_t virtual_addr, 
-			      pagesize_t size, 
-			      pageoffs_t offset) {
-  MemoryPage mpage;
-  mpage.level = level;
-  mpage.self_id = id;
-  mpage.flags = flags;
-  mpage.physical_address = physical_addr;
-  mpage.virtual_address = virtual_addr;
-  mpage.self_size = size;
-  mpage.self_offset = offset;
-  mpage.last_accessed_epoch = 0;
-  mpage.faulted = NOT_FAULTED;
-  mpage.intermediate_table = NULL;
-
-  for (int i = 0; i < MAX_TABLE_PAGE; i++) {
-    mpage.mapped_addresses[i] = ADDRESS_UNMAPPED;
-  }
-
-  return mpage;
+void page_table_entry_protect_read(PageTableEntry *entry) {
+   entry->protect_read = true;
 }
 
-void add_mempage_imm_table(MemoryPage *page, PageTable *imm_table) {
-  page->intermediate_table = imm_table;
+void page_table_entry_protect_write(PageTableEntry *entry) {
+   entry->protect_write = true;
 }
 
-void add_mempage_tlb(MemoryPage *page, TransLookasideBuffer *tbl) {
-  page->tlb = tlb;
+void page_table_entry_protect_exec(PageTableEntry *entry) {
+   entry->protect_exec = true;
 }
+
+void page_table_entry_unprotect_read(PageTableEntry *entry) {
+   entry->protect_read = false;
+}
+
+void page_table_entry_unprotect_write(PageTableEntry *entry) {
+   entry->protect_write = false;
+}
+
+void page_table_entry_unprotect_exec(PageTableEntry *entry) {
+   entry->protect_exec = false;
+}
+
+
+
+
+
+
 
 
 
