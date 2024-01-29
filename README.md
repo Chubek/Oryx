@@ -1,4 +1,4 @@
-# Oryx: A Litewight Non-Compliant OS
+#Oryx : A Litewight Non - Compliant OS
 
 Oryx is a liteweight, Non-Compliant OS. I started work on it very recently. And I have to figure out a lot of stuff. I just keep reading the seminal Dino Book and make progress.
 
