@@ -3,7 +3,7 @@
 
 
 typedef struct SegmentSelector SegmentSelector;
-
+typedef struct SegmentDescriptor SegmentDescriptor;
 
 
 
